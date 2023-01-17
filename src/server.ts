@@ -47,14 +47,18 @@ app.get("/reviews", async (req, res) => {
   }
 });
 
+// Get 10 MOST RECENT recipe reviews
+app.get("/reviews/10", async (req, res) => {
   try {
-    //For this to be successful, must connect to db
-    await client.query("select now()");
-    res.status(200).send("system ok");
+    const response = await client.query(
+      "SELECT * FROM recipe_reviews ORDER BY review_id DESC LIMIT 10"
+    );
+    res.status(200).send(response.rows);
   } catch (error) {
-    //Recover from error rather than letting system halt
     console.error(error);
-    res.status(500).send("An error occurred. Check server logs.");
+  }
+});
+
   }
 });
 
