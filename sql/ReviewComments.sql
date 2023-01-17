@@ -5,6 +5,7 @@ CREATE TABLE  review_comments (
     review_id          integer,
     commenter_user_id            integer,
     comment       text,
+    comment_time date DEFAULT NOW(),
     FOREIGN KEY(review_id) REFERENCES recipe_reviews(review_id),
     FOREIGN KEY(commenter_user_id) REFERENCES users(user_id),
     UNIQUE(review_id, commenter_user_id)
