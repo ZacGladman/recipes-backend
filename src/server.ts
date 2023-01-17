@@ -59,6 +59,15 @@ app.get("/reviews/10", async (req, res) => {
   }
 });
 
+//Get a SPECIFIC USER'S recipe reviews
+app.get("/reviews/:userID", async (req, res) => {
+  try {
+    const userID = req.params.userID;
+    const query = "SELECT * FROM recipe_reviews WHERE user_id = $1";
+    const response = await client.query(query, [userID]);
+    res.status(200).send(response.rows);
+  } catch (error) {
+    console.error(error);
   }
 });
 
