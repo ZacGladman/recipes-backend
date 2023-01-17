@@ -34,6 +34,19 @@ app.post("/users", async (req, res) => {
     console.error(error);
   }
 });
+
+/* ================================================================= RECIPE REVIEWS */
+/* ========================================== GET REQUESTS */
+// Get ALL recipe reviews
+app.get("/reviews", async (req, res) => {
+  try {
+    const response = await client.query("SELECT * FROM recipe_reviews");
+    res.status(200).send(response.rows);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
   try {
     //For this to be successful, must connect to db
     await client.query("select now()");
