@@ -20,7 +20,20 @@ app.get("/", async (req, res) => {
   res.json({ msg: "Hello! There's nothing interesting for GET /" });
 });
 
-app.get("/health-check", async (req, res) => {
+/* ================================================================= USERS */
+
+// ADD a new user:
+app.post("/users", async (req, res) => {
+  const { username, userEmail } = req.body;
+  const query =
+    "INSERT INTO users(username, email) VALUES ($1, $2) ON CONFLICT DO NOTHING";
+  try {
+    await client.query(query, [username, userEmail]);
+    res.status(200).send("user added!");
+  } catch (error) {
+    console.error(error);
+  }
+});
   try {
     //For this to be successful, must connect to db
     await client.query("select now()");
