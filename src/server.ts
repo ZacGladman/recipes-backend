@@ -36,18 +36,18 @@ app.post("/users", async (req, res) => {
 });
 
 /* ================================================================= RECIPE REVIEWS */
-/* ========================================== GET REQUESTS */
-// Get ALL recipe reviews
+/* ================================================= GET REQUESTS */
+// GET ALL recipe reviews
 app.get("/reviews", async (req, res) => {
   try {
-    const response = await client.query("SELECT * FROM recipe_reviews");
+    const response = await client.query("SELECT * FROM recipe_reviews"); //LEFT JOIN TO GET USER NAME RATHER THAN ID?
     res.status(200).send(response.rows);
   } catch (error) {
     console.error(error);
   }
 });
 
-// Get 10 MOST RECENT recipe reviews
+// GET 10 MOST RECENT recipe reviews
 app.get("/reviews/10", async (req, res) => {
   try {
     const response = await client.query(
@@ -59,7 +59,7 @@ app.get("/reviews/10", async (req, res) => {
   }
 });
 
-//Get a SPECIFIC USER'S recipe reviews
+//GET a SPECIFIC USER'S recipe reviews
 app.get("/reviews/:userID", async (req, res) => {
   try {
     const userID = req.params.userID;
