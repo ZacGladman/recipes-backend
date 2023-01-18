@@ -59,6 +59,18 @@ app.get("/reviews/10", async (req, res) => {
   }
 });
 
+//GET 10 highest-rated (average) recipes ===========================> TEST THIS!!!!!!!
+app.get("/reviews", async (req, res) => {
+  try {
+    const response = await client.query(
+      "SELECT recipe_api_id, AVG(rating_value) FROM recipe_reviews GROUP BY recipe_api_id ORDER BY AVG(rating_value) DESC LIMIT 10"
+    );
+    res.status(200).send(response.rows);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 //GET a SPECIFIC USER'S recipe reviews
 app.get("/reviews/:userID", async (req, res) => {
   try {
