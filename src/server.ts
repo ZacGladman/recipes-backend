@@ -83,6 +83,21 @@ app.get("/reviews/:userID", async (req, res) => {
   }
 });
 
+/* ================================================= POST REQUESTS */
+//POST a new review
+app.post("/reviews/new-full", async (req, res) => {
+  try {
+    const { recipe_api_id, user_id, rating_value, review } = req.body;
+    const values = [recipe_api_id, user_id, rating_value, review];
+    const query =
+      "INSERT INTO recipe_reviews(recipe_api_id, user_id, rating_value, review, submission_time) VALUES ($1, $2, $3, $4, NOW()) ON CONFLICT(recipe_api_id, user_id) DO UPDATE SET rating_value = $3, review = $4, submission_time = NOW()";
+    await client.query(query, values);
+    res.status(200).send("review upsert successful");
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 connectToDBAndStartListening();
 
 async function connectToDBAndStartListening() {
