@@ -35,6 +35,25 @@ app.post("/users", async (req, res) => {
   }
 });
 
+/* ================================================================= RECIPES =======*/
+
+//POST a new recipe
+app.post("recipes", async (req, res) => {
+  try {
+    const query =
+      "INSERT INTO recipes (recipe_api_id, recipe_name, recipe_img_url) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING";
+    const { recipe_api_id, recipe_name, recipe_img_url } = req.body;
+    const response = await client.query(query, [
+      recipe_api_id,
+      recipe_name,
+      recipe_img_url,
+    ]);
+    res.status(200).send(response.rows);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 /* ================================================================= RECIPE REVIEWS */
 /* ================================================= GET REQUESTS */
 // GET ALL recipe reviews
