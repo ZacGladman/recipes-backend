@@ -62,7 +62,7 @@ const baseQuery =
 
 app.get("/reviews", async (req, res) => {
   try {
-    const response = await client.query("SELECT * FROM recipe_reviews"); // JOIN TO GET USER NAME NOT ID, AND RECIPE_API_ID NOT RECIPE_ID?
+    const response = await client.query(baseQuery);
     res.status(200).send(response.rows);
   } catch (error) {
     console.error(error);
