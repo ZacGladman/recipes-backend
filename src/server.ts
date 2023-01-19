@@ -81,12 +81,12 @@ app.get("/reviews/newest-10", async (req, res) => {
   }
 });
 
-//GET 10 highest-rated (average) recipes ===========================> TEST THIS!!!!!!!
-app.get("/reviews", async (req, res) => {
+//GET 10 highest-rated (average) recipes
+app.get("/reviews/top-10-rated", async (req, res) => {
   try {
-    const response = await client.query(
-      "SELECT recipe_api_id, AVG(rating_value) FROM recipe_reviews GROUP BY recipe_api_id ORDER BY AVG(rating_value) DESC LIMIT 10" //UPDATE THIS
-    );
+    const query =
+      "SELECT recipes.recipe_api_id, recipes.recipe_name, recipes.recipe_img_url, AVG(recipe_reviews.rating_value) FROM recipe_reviews INNER JOIN recipes ON recipes.recipe_id = recipe_reviews.recipe_id GROUP BY recipes.recipe_name, recipes.recipe_api_id, recipes.recipe_img_url ORDER BY AVG(recipe_reviews.rating_value) DESC LIMIT 10";
+    const response = await client.query(query);
     res.status(200).send(response.rows);
   } catch (error) {
     console.error(error);
