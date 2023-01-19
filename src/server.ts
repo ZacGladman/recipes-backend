@@ -26,9 +26,9 @@ app.get("/", async (req, res) => {
 app.post("/users", async (req, res) => {
   const { username, userEmail, profilePic } = req.body;
   const query =
-    "INSERT INTO users(username, email) VALUES ($1, $2) ON CONFLICT DO NOTHING";
+    "INSERT INTO users(username, email, profile_pic) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING";
   try {
-    await client.query(query, [username, userEmail]);
+    await client.query(query, [username, userEmail, profilePic]);
     res.status(200).send("user added!");
   } catch (error) {
     console.error(error);
