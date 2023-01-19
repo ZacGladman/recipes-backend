@@ -97,7 +97,7 @@ app.get("/reviews/top-10-rated", async (req, res) => {
 app.get("/reviews/:userID", async (req, res) => {
   try {
     const userID = req.params.userID;
-    const query = "SELECT * FROM recipe_reviews WHERE user_id = $1";
+    const query = baseQuery + " WHERE users.user_id = $1";
     const response = await client.query(query, [userID]);
     res.status(200).send(response.rows);
   } catch (error) {
