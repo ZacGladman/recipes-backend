@@ -38,7 +38,7 @@ app.post("/users", async (req, res) => {
 /* ================================================================= RECIPES =======*/
 
 //POST a new recipe
-app.post("recipes", async (req, res) => {
+app.post("/recipes", async (req, res) => {
   try {
     const query =
       "INSERT INTO recipes (recipe_api_id, recipe_name, recipe_img_url) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING";
