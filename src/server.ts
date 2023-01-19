@@ -20,7 +20,7 @@ app.get("/", async (req, res) => {
   res.json({ msg: "Hello! There's nothing interesting for GET /" });
 });
 
-/* ================================================================= USERS */
+/* ================================================================= USERS =========*/
 
 // ADD a new user:
 app.post("/users", async (req, res) => {
@@ -59,7 +59,7 @@ app.post("recipes", async (req, res) => {
 // GET ALL recipe reviews
 app.get("/reviews", async (req, res) => {
   try {
-    const response = await client.query("SELECT * FROM recipe_reviews"); //LEFT JOIN TO GET USER NAME RATHER THAN ID?
+    const response = await client.query("SELECT * FROM recipe_reviews"); // JOIN TO GET USER NAME NOT ID, AND RECIPE_API_ID NOT RECIPE_ID?
     res.status(200).send(response.rows);
   } catch (error) {
     console.error(error);
@@ -82,7 +82,7 @@ app.get("/reviews/10", async (req, res) => {
 app.get("/reviews", async (req, res) => {
   try {
     const response = await client.query(
-      "SELECT recipe_api_id, AVG(rating_value) FROM recipe_reviews GROUP BY recipe_api_id ORDER BY AVG(rating_value) DESC LIMIT 10"
+      "SELECT recipe_api_id, AVG(rating_value) FROM recipe_reviews GROUP BY recipe_api_id ORDER BY AVG(rating_value) DESC LIMIT 10" //UPDATE THIS
     );
     res.status(200).send(response.rows);
   } catch (error) {
