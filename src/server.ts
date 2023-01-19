@@ -24,7 +24,7 @@ app.get("/", async (req, res) => {
 
 // ADD a new user:
 app.post("/users", async (req, res) => {
-  const { username, userEmail } = req.body;
+  const { username, userEmail, profilePic } = req.body;
   const query =
     "INSERT INTO users(username, email) VALUES ($1, $2) ON CONFLICT DO NOTHING";
   try {
