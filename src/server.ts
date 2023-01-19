@@ -70,11 +70,11 @@ app.get("/reviews", async (req, res) => {
 });
 
 // GET 10 MOST RECENT recipe reviews
-app.get("/reviews/10", async (req, res) => {
+app.get("/reviews/newest-10", async (req, res) => {
   try {
-    const response = await client.query(
-      "SELECT * FROM recipe_reviews ORDER BY review_id DESC LIMIT 10"
-    );
+    const query =
+      baseQuery + " ORDER BY recipe_reviews.review_id DESC LIMIT 10";
+    const response = await client.query(query);
     res.status(200).send(response.rows);
   } catch (error) {
     console.error(error);
