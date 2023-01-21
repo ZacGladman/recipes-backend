@@ -121,6 +121,16 @@ app.get("/reviews/recipe/:recipeID/user/:userID", async (req, res) => {
     console.error(error);
   }
 });
+
+//GET all reviews for a specific recipe
+app.get("/reviews/recipe/:recipeID", async (req, res) => {
+  const recipe_api_id = req.params.recipeID;
+  const query =
+    "SELECT recipes.recipe_api_id, recipe_reviews.review_id, recipe_reviews.rating_value, recipe_reviews.review, recipe_reviews.submission_time, users.username, users.profile_pic FROM recipe_reviews INNER JOIN recipes ON recipes.recipe_api_id = recipe_reviews.recipe_api_id INNER JOIN users ON users.user_id = recipe_reviews.user_id WHERE recipes.recipe_api_id = $1";
+  const response = await client.query(query, [recipe_api_id]);
+  res.status(200).send(response.rows);
+});
+
 /* ================================================= POST REQUESTS */
 //POST a new review
 app.post("/reviews/new-full", async (req, res) => {
