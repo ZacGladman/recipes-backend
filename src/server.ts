@@ -151,13 +151,22 @@ app.post(
 );
 
 //POST a new quick rating
-app.post("/reviews/new-quick", async (req, res) => {
-  try {
-    const { recipe_api_id, user_id, rating_value } = req.body;
-    const query =
-      "INSERT INTO recipe_reviews(recipe_api_id, user_id, rating_value) VALUES ($1, $2, $3) ON CONFLICT(recipe_api_id, user_id) DO UPDATE SET rating_value = $3";
-    await client.query(query, [recipe_api_id, user_id, rating_value]);
-    res.status(200).send("quick rating upsert successful");
+app.post(
+  "/reviews/new-quick/recipe/:recipeID/user/:userID",
+  async (req, res) => {
+    try {
+      const { recipeID, userID } = req.params;
+      const { rating_value } = req.body;
+      const query =
+        "INSERT INTO recipe_reviews(recipe_api_id, user_id, rating_value) VALUES ($1, $2, $3) ON CONFLICT(recipe_api_id, user_id) DO UPDATE SET rating_value = $3";
+      await client.query(query, [recipeID, userID, rating_value]);
+      res.status(200).send("quick rating upsert successful");
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
   } catch (error) {
     console.error(error);
   }
