@@ -181,6 +181,19 @@ app.get("/user/:userID/cooklist", async (req, res) => {
   }
 });
 
+/* ============== GET whether or not recipe is in a user's cooklist */
+app.get("/user/:userID/cooklist/recipe/:recipeID", async (req, res) => {
+  try {
+    const { userID, recipeID } = req.params;
+    const query =
+      "SELECT * FROM cooklist WHERE recipe_api_id = $1 AND user_id = $2";
+    const response = await client.query(query, [recipeID, userID]);
+    res.status(200).send(response.rows);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
   } catch (error) {
     console.error(error);
   }
