@@ -194,6 +194,19 @@ app.get("/user/:userID/cooklist/recipe/:recipeID", async (req, res) => {
   }
 });
 
+/* =========================== POST a new item to a user's cooklist */
+app.post("/user/:userID/cooklist/new", async (req, res) => {
+  try {
+    const user_id = req.params.userID;
+    const { recipe_api_id } = req.body;
+    const query =
+      "WITH e AS(INSERT INTO cooklist(recipe_api_id, user_id) VALUES ($1, $2) ON CONFLICT DO NOTHING RETURNING cooklist_id) SELECT * FROM e UNION SELECT cooklist_id FROM cooklist WHERE recipe_api_id = $1 AND user_id = $2";
+    const response = await client.query(query, [recipe_api_id, user_id]);
+    res.status(200).send(response.rows[0]);
+  } catch (error) {
+    console.error(error);
+  }
+});
   } catch (error) {
     console.error(error);
   }
