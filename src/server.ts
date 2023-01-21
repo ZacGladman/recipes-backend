@@ -26,10 +26,14 @@ app.get("/", async (req, res) => {
 app.post("/users", async (req, res) => {
   const { username, userEmail, profilePic } = req.body;
   const query =
-    "INSERT INTO users(username, email, profile_pic) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING";
+    "WITH e AS(INSERT INTO users(username, email, profile_pic) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING RETURNING user_id) SELECT * FROM e UNION SELECT user_id FROM users WHERE email = $2";
   try {
-    await client.query(query, [username, userEmail, profilePic]);
-    res.status(200).send("user added!");
+    const response = await client.query(query, [
+      username,
+      userEmail,
+      profilePic,
+    ]);
+    res.status(200).send(response.rows[0]);
   } catch (error) {
     console.error(error);
   }
