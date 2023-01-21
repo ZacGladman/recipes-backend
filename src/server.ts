@@ -62,7 +62,7 @@ app.post("/recipes", async (req, res) => {
 /* ================================================= GET REQUESTS */
 // GET ALL recipe reviews
 const baseQuery =
-  "SELECT recipes.recipe_api_id, recipes.recipe_name, recipes.recipe_img_url, recipe_reviews.review_id, recipe_reviews.rating_value, recipe_reviews.review, recipe_reviews.submission_time, users.username, users.profile_pic FROM recipe_reviews INNER JOIN recipes ON recipes.recipe_id = recipe_reviews.recipe_id INNER JOIN users ON users.user_id = recipe_reviews.user_id";
+  "SELECT recipes.recipe_api_id, recipes.recipe_name, recipes.recipe_img_url, recipe_reviews.review_id, recipe_reviews.rating_value, recipe_reviews.review, recipe_reviews.submission_time, users.username, users.profile_pic FROM recipe_reviews INNER JOIN recipes ON recipes.recipe_api_id = recipe_reviews.recipe_api_id INNER JOIN users ON users.user_id = recipe_reviews.user_id";
 
 app.get("/reviews", async (req, res) => {
   try {
