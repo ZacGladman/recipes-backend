@@ -98,7 +98,7 @@ app.get("/reviews/top-10-rated", async (req, res) => {
 });
 
 //GET a SPECIFIC USER'S recipe reviews
-app.get("/reviews/:userID", async (req, res) => {
+app.get("/reviews/user/:userID", async (req, res) => {
   try {
     const userID = req.params.userID;
     const query = baseQuery + " WHERE users.user_id = $1";
