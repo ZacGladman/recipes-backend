@@ -167,6 +167,20 @@ app.post(
   }
 );
 
+/* ================================================================= COOK LIST */
+/* ========================= GET a specific user's cooklist items */
+app.get("/user/:userID/cooklist", async (req, res) => {
+  try {
+    const user_id = req.params.userID;
+    const query =
+      "SELECT recipes.recipe_api_id, recipes.recipe_name, recipes.recipe_img_url FROM recipes INNER JOIN cooklist ON recipes.recipe_api_id = cooklist.recipe_api_id WHERE cooklist.user_id = $1";
+    const response = await client.query(query, [user_id]);
+    res.status(200).send(response.rows);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
   } catch (error) {
     console.error(error);
   }
