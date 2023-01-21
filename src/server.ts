@@ -207,6 +207,15 @@ app.post("/user/:userID/cooklist/new", async (req, res) => {
     console.error(error);
   }
 });
+
+/* ========================== DELETE an item from a user's cooklist */
+app.delete("/cooklist/:cooklist_id", async (req, res) => {
+  try {
+    const { cooklist_id } = req.params;
+
+    const query = "DELETE FROM cooklist WHERE cooklist_id = $1";
+    await client.query(query, [cooklist_id]);
+    res.status(200).send("item deleted from cooklist");
   } catch (error) {
     console.error(error);
   }
