@@ -2,6 +2,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import { Client } from "pg";
+import { Z_VERSION_ERROR } from "zlib";
 import { getEnvVarOrFail } from "./support/envVarUtils";
 import { setupDBClientConfig } from "./support/setupDBClientConfig";
 
@@ -91,6 +92,19 @@ app.get("/reviews/top-10-rated", async (req, res) => {
     const query =
       "SELECT recipes.recipe_api_id, recipes.recipe_name, recipes.recipe_img_url, AVG(recipe_reviews.rating_value) FROM recipe_reviews INNER JOIN recipes ON recipes.recipe_api_id = recipe_reviews.recipe_api_id GROUP BY recipes.recipe_name, recipes.recipe_api_id, recipes.recipe_img_url ORDER BY AVG(recipe_reviews.rating_value) DESC LIMIT 10";
     const response = await client.query(query);
+    res.status(200).send(response.rows);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+//GET a specific recipe's average rating
+app.get("/reviews/recipe/:recipeID/avg-rating", async (req, res) => {
+  try {
+    const recipeID = req.params.recipeID;
+    const query =
+      "SELECT AVG(rating_value), COUNT(*) from recipe_reviews WHERE recipe_api_id = $1 GROUP BY recipe_api_id";
+    const response = await client.query(query, [recipeID]);
     res.status(200).send(response.rows);
   } catch (error) {
     console.error(error);
