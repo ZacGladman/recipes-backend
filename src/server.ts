@@ -74,11 +74,11 @@ app.get("/reviews", async (req, res) => {
   }
 });
 
-// GET 10 MOST RECENT recipe reviews
-app.get("/reviews/newest-10", async (req, res) => {
+// GET 8 MOST RECENT recipe reviews
+app.get("/reviews/newest-16", async (req, res) => {
   try {
     const query =
-      baseQuery + " ORDER BY recipe_reviews.review_id DESC LIMIT 10";
+      baseQuery + " ORDER BY recipe_reviews.review_id DESC LIMIT 16";
     const response = await client.query(query);
     res.status(200).send(response.rows);
   } catch (error) {
@@ -86,11 +86,11 @@ app.get("/reviews/newest-10", async (req, res) => {
   }
 });
 
-//GET 10 highest-rated (average) recipes
-app.get("/reviews/top-10-rated", async (req, res) => {
+//GET 8 highest-rated (average) recipes
+app.get("/reviews/top-8-rated", async (req, res) => {
   try {
     const query =
-      "SELECT recipes.recipe_api_id, recipes.recipe_name, recipes.recipe_img_url, AVG(recipe_reviews.rating_value) FROM recipe_reviews INNER JOIN recipes ON recipes.recipe_api_id = recipe_reviews.recipe_api_id GROUP BY recipes.recipe_name, recipes.recipe_api_id, recipes.recipe_img_url ORDER BY AVG(recipe_reviews.rating_value) DESC LIMIT 10";
+      "SELECT recipes.recipe_api_id, recipes.recipe_name, recipes.recipe_img_url, AVG(recipe_reviews.rating_value), COUNT(recipes.recipe_api_id) FROM recipe_reviews INNER JOIN recipes ON recipes.recipe_api_id = recipe_reviews.recipe_api_id GROUP BY recipes.recipe_name, recipes.recipe_api_id, recipes.recipe_img_url ORDER BY AVG(recipe_reviews.rating_value) DESC, COUNT(recipes.recipe_api_id) DESC LIMIT 8";
     const response = await client.query(query);
     res.status(200).send(response.rows);
   } catch (error) {
