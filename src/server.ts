@@ -2,7 +2,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import { Client } from "pg";
-import { Z_VERSION_ERROR } from "zlib";
 import { getEnvVarOrFail } from "./support/envVarUtils";
 import { setupDBClientConfig } from "./support/setupDBClientConfig";
 
@@ -123,13 +122,12 @@ app.get("/reviews/user/:userID", async (req, res) => {
   }
 });
 
-//GET a SPECIFIC USER's recipe review for a SPECIFIC RECIPE
-app.get("/reviews/recipe/:recipeID/user/:userID", async (req, res) => {
+//GET a SPECIFIC RECIPE REVIEW
+app.get("/reviews/:reviewID", async (req, res) => {
   try {
-    const { recipeID, userID } = req.params;
-    const query =
-      "SELECT rating_value, review FROM recipe_reviews WHERE recipe_api_id = $1 AND user_id = $2";
-    const response = await client.query(query, [recipeID, userID]);
+    const { reviewID } = req.params;
+    const query = baseQuery + " WHERE recipe_reviews.review_id = $1";
+    const response = await client.query(query, [reviewID]);
     res.status(200).send(response.rows);
   } catch (error) {
     console.error(error);
